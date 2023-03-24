@@ -1,38 +1,10 @@
-package clockface_test
+package clockface
 
 import (
 	"math"
 	"testing"
 	"time"
 )
-
-type Point struct {
-	X float64
-	Y float64
-}
-
-func TestSecondHandAtMidnight(t *testing.T) {
-	// tm := time.Date(1337, time.January, 1, 0, 0, 0, 0, time.UTC)
-	// want := clockface.Point{X: 150, Y: 150 - 90}
-	// got := clockface.SecondHand(tm)
-
-	// if got != want {
-	// 	t.Errorf("Got %v, want %v", got, want)
-	// }
-}
-func TestSecondHandAt30Seconds(t *testing.T) {
-	// tm := time.Date(1337, time.January, 1, 0, 0, 30, 0, time.UTC)
-	// want := clockface.Point{X: 150, Y: 150 + 90}
-	// got := clockface.SecondHand(tm)
-
-	// if got != want {
-	// 	t.Errorf("Got %v, want %v", got, want)
-	// }
-}
-
-func SecondHand(t time.Time) Point {
-	return Point{150, 60}
-}
 
 func TestSecondsInRadians(t *testing.T) {
 	cases := []struct {
@@ -49,7 +21,7 @@ func TestSecondsInRadians(t *testing.T) {
 		t.Run(testName(c.time), func(t *testing.T) {
 			got := secondsInRadians(c.time)
 			if got != c.angle {
-				t.Fatalf("wanted %v radians, but got %v", c.angle, got)
+				t.Fatalf("Wanted %v radians, but got %v", c.angle, got)
 			}
 		})
 	}
@@ -74,13 +46,6 @@ func TestSecondHandPoint(t *testing.T) {
 	}
 }
 
-func secondHandPoint(t time.Time) Point {
-	angle := secondsInRadians(t)
-	x := math.Sin(angle)
-	y := math.Cos(angle)
-	return Point{x, y}
-}
-
 func roughlyEqualFloat64(a, b float64) bool {
 	const equalityThreshold = 1e-7
 	return math.Abs(a-b) < equalityThreshold
@@ -91,14 +56,10 @@ func roughlyEqualPoint(a, b Point) bool {
 		roughlyEqualFloat64(a.Y, b.Y)
 }
 
-func simpleTime(h, m, s int) time.Time {
-	return time.Date(1337, time.January, 1, h, m, s, 0, time.UTC)
+func simpleTime(hours, minutes, seconds int) time.Time {
+	return time.Date(312, time.October, 28, hours, minutes, seconds, 0, time.UTC)
 }
 
 func testName(t time.Time) string {
 	return t.Format("15:04:05")
-}
-
-func secondsInRadians(t time.Time) float64 {
-	return (math.Pi / (30 / (float64(t.Second()))))
 }
